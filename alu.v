@@ -13,7 +13,9 @@ module alu (
 	input  [`ALU_FUNC_WIDTH-1:0] funcIn,    // ALU function in
 	input  [`BIT_SEL_WIDTH-1:0]  bitSel,    // Bit selection in
 	input  cFLag,                           // Carry status
-	output [`DATA_WIDTH-1:0]     resultOut  // ALU result out
+
+	output [`ALU_STATUS_WIDTH-1:0] aluStatusOut //ALU status out
+	output [`DATA_WIDTH-1:0]       resultOut    // ALU result out
 );
 
 	// Reg
@@ -37,7 +39,7 @@ module alu (
 			`ALU_RLF, `ALU_RRF: begin
 				status = status | {1'b0, 1'b0, carry};
 			end
-			default : status = 3'd0;
+			default : /* default */;
 		endcase
 	end
 

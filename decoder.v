@@ -6,31 +6,36 @@
 
 `include "define.v"
 
-`define CU_FE_STATE_BITS   2
-`define CU_EX_STATE_BITS   5
+`define FE_STATE_BITS   2
+`define EX_STATE_BITS   5
 
-`define FE_Q1_INCPC `CU_FE_STATE_BITS'b00
-`define FE_Q2_IDLE  `CU_FE_STATE_BITS'b01
-`define FE_Q3_IDLE  `CU_FE_STATE_BITS'b10
-`define FE_Q4_FETCH `CU_FE_STATE_BITS'b11
+`define FE_Q1_INCPC `FE_STATE_BITS'b00
+`define FE_Q2_IDLE  `FE_STATE_BITS'b01
+`define FE_Q3_IDLE  `FE_STATE_BITS'b10
+`define FE_Q4_FETCH `FE_STATE_BITS'b11
 
 
 module decoder (
 	input clk,    // Clock
 	input rst,  // Asynchronous reset active low
 	input [`INST_WIDTH-1:0] instIn, // Instruction in
-	output [`ALU_FUNC_WIDTH-1:0] aluFuncOut // ALU function out
+	output [`ALU_FUNC_WIDTH-1:0] aluFuncOut,   // ALU function out
+	output [`FE_STATE_BITS-1:0]  fetchState,   // Fetch tate out
+	output [`EX_STATE_BITS-1:0]  executeState // Execute state out
 );
 	
 	// Reg
-	reg [`CU_FE_STATE_BITS-1:0] currentFetchState;
-	reg [`CU_EX_STATE_BITS-1:0] currentExecuteState;
-	reg [`CU_FE_STATE_BITS-1:0] nextFetchState;
-	reg [`CU_EX_STATE_BITS-1:0] nextExecuteState;
-	reg [`ALU_FUNC_WIDTH-1:0]   aluFuncRetain;
-	reg [`ALU_FUNC_WIDTH-1:0]   aluFunc;
+	reg [`FE_STATE_BITS-1:0]  currentFetchState;
+	reg [`EX_STATE_BITS-1:0]  currentExecuteState;
+	reg [`FE_STATE_BITS-1:0]  nextFetchState;
+	reg [`EX_STATE_BITS-1:0]  nextExecuteState;
+	reg [`ALU_FUNC_WIDTH-1:0] aluFuncRetain;
+	reg [`ALU_FUNC_WIDTH-1:0] aluFunc;
+
 	// Assign
-	assign aluFuncOut = aluFuncRetain;
+	assign aluFuncOut   = aluFuncRetain;
+	assign fetchState   = currentFetchState;
+	assign executeState = currentExecuteState;
 
 	// Sequence logic
 	always@(posedge clk or negedge rst) begin
@@ -103,9 +108,7 @@ module decoder (
 						`I_XORWF_6: begin
 							aluFunc = `ALU_XORWF;
 						end
-						default : begin
-							aluFunc = `ALU_IDLE;
-						end
+						default : /* default */;
 					endcase
 				end
 				else if (instIn[11:10] == 2'b01) begin 
@@ -132,9 +135,7 @@ module decoder (
 						`I_XORLW_4: begin
 							aluFunc = `ALU_XORLW;
 						end
-						default : begin
-							aluFunc = `ALU_IDLE;
-						end
+						default : /* default */;
 					endcase
 				end
 			end
@@ -217,7 +218,7 @@ module decoder (
 							nextExecuteState = `EX_Q4_CALL;
 						end
 						`I_RETLW_4: begin
-							nextExecuteState = EX_Q4_RETLW;
+							nextExecuteState = `EX_Q4_RETLW;
 						end
 						default: begin 
 							nextExecuteState = `EX_Q4_ELSE;
@@ -225,7 +226,6 @@ module decoder (
 					endcase
 				end
 			end
-
 			`EX_Q4_CLRF, `EX_Q4_CLRW, `EX_Q4_DECF, `EX_Q4_MOVWF, `EX_Q4_MOVF,
 			`EX_Q4_SUBWF, `EX_Q4_CLRWDT, `EX_Q4_OPTION, `EX_Q4_SLEEP,
 			`EX_Q4_TRIS, `EX_Q4_FSZ, `EX_Q4_SWAPF, `EX_Q4_00_ELSE,
@@ -238,4 +238,23 @@ module decoder (
 			end
 		endcase
 	end
+
+	always @(*) begin
+		case (currentExecuteState)
+			`FE_Q1_INCPC: begin 
+				nextFetchState = `FE_Q2_IDLE;
+			end
+			`FE_Q2_IDLE: begin 
+				nextFetchState = `FE_Q3_IDLE;
+			end
+			`FE_Q3_IDLE: begin 
+				nextFetchState = `FE_Q4_FETCH;
+			end
+			`FE_Q4_FETCH: begin 
+				nextFetchState = `FE_Q1_INCPC;
+			end
+			default : nextFetchState = `FE_Q1_INCPC;
+		endcase
+	end
+
 endmodule

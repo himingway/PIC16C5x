@@ -12,6 +12,7 @@
 `define DATA_WIDTH       8
 `define ALU_STATUS_WIDTH 3
 `define BIT_SEL_WIDTH    3
+`define PC_WIDTH         9
 
 // ALU Functions
 `define ALU_FUNC_WIDTH 5
@@ -85,7 +86,16 @@
 `define I_OPTION_12 `INST_WIDTH'b0000_0000_0010
 `define I_SLEEP_12  `INST_WIDTH'b0000_0000_0011
 
+// Fetch
+`define FE_STATE_BITS   2
+
+`define FE_Q1_INCPC `FE_STATE_BITS'b00
+`define FE_Q2_IDLE  `FE_STATE_BITS'b01
+`define FE_Q3_IDLE  `FE_STATE_BITS'b10
+`define FE_Q4_FETCH `FE_STATE_BITS'b11
+
 // Execute
+`define EX_STATE_BITS   5
 
 `define EX_Q1_TEST_SKIP `CU_EX_STATE_BITS'b00001 //Q1
 `define EX_Q2_FSR       `CU_EX_STATE_BITS'b00010 //Q2
@@ -104,7 +114,7 @@
 `define EX_Q4_SWAPF   `CU_EX_STATE_BITS'b10010
 `define EX_Q4_00_ELSE `CU_EX_STATE_BITS'b10011
 `define EX_Q4_BXF     `CU_EX_STATE_BITS'b10100
-`define EX_Q4_BTFSX  `CU_EX_STATE_BITS'b10101
+`define EX_Q4_BTFSX   `CU_EX_STATE_BITS'b10101
 `define EX_Q4_ALUXLW  `CU_EX_STATE_BITS'b10110 //AND, IOR, XOR
 `define EX_Q4_MOVLW   `CU_EX_STATE_BITS'b10111
 `define EX_Q4_GOTO    `CU_EX_STATE_BITS'b11000
@@ -112,5 +122,10 @@
 `define EX_Q4_RETLW   `CU_EX_STATE_BITS'b11010
 `define EX_Q4_ELSE    `CU_EX_STATE_BITS'b11011
 `define EX_Q4_MOVF    `CU_EX_STATE_BITS'b11100
+
+// Stacj
+`define STK_NOP  2'b00
+`define STK_PUSH 2'b01
+`define STK_POP  2'b10
 
 `endif 
