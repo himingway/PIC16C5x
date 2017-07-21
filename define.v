@@ -123,9 +123,19 @@
 `define EX_Q4_ELSE    `CU_EX_STATE_BITS'b11011
 `define EX_Q4_MOVF    `CU_EX_STATE_BITS'b11100
 
-// Stacj
+// Stack
 `define STK_NOP  2'b00
 `define STK_PUSH 2'b01
 `define STK_POP  2'b10
+
+// Reg
+`define ADDR_INDF   5'b0_0000
+`define ADDR_TMR0   5'b0_0001
+`define ADDR_PCL    5'b0_0010
+`define ADDR_STATUS 5'b0_0011
+`define ADDR_FSR    5'b0_0100
+`define ADDR_PROTA  5'b0_0101
+`define ADDR_PROTB  5'b0_0110
+`define ADDR_PROTC  5'b0_0111
 
 `endif 
