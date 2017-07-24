@@ -14,8 +14,8 @@ module alu (
 	input  [`BIT_SEL_WIDTH-1:0]  bitSel,    // Bit selection in
 	input  cFLag,                           // Carry status
 
-	output [`ALU_STATUS_WIDTH-1:0] aluStatusOut //ALU status out
-	output [`DATA_WIDTH-1:0]       resultOut    // ALU result out
+	output [`ALU_STATUS_WIDTH-1:0] aluStatusOut, //ALU status out
+	output [`DATA_WIDTH-1:0]       resultOut     // ALU result out
 );
 
 	// Reg
@@ -26,6 +26,7 @@ module alu (
 
 	// Assign
 	assign resultOut = result;
+	assign aluStatusOut = status;
 
 	/*========Combination Logic========*/
 
@@ -39,12 +40,13 @@ module alu (
 			`ALU_RLF, `ALU_RRF: begin
 				status = status | {1'b0, 1'b0, carry};
 			end
-			default : /* default */;
 		endcase
 	end
 
 	// Arithmetic Unit
 	always @(*) begin
+		carry = 0;
+		result = 0;
 		case (funcIn)
 			`ALU_ADDWF: begin // ADD W and f
 				{C3,result[3:0]} = fIn[3:0] + WIn[3:0];
@@ -93,10 +95,15 @@ module alu (
 			`ALU_IORLW: begin // Inclusive Or Literal in W
 				result = lIn | WIn;
 			end
+			`ALU_XORLW: begin 
+				result = lIn ^ WIn;
+			end
 			`ALU_IDLE: begin 
 				result = 8'd0;
 			end
-			default : result = 8'd0;
+			default: begin
+				result = 8'd0;
+			end
 		endcase
 	end
 

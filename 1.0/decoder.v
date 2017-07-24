@@ -6,15 +6,6 @@
 
 `include "define.v"
 
-`define FE_STATE_BITS   2
-`define EX_STATE_BITS   5
-
-`define FE_Q1_INCPC `FE_STATE_BITS'b00
-`define FE_Q2_IDLE  `FE_STATE_BITS'b01
-`define FE_Q3_IDLE  `FE_STATE_BITS'b10
-`define FE_Q4_FETCH `FE_STATE_BITS'b11
-
-
 module decoder (
 	input clk,    // Clock
 	input rst,  // Asynchronous reset active low
@@ -108,7 +99,6 @@ module decoder (
 						`I_XORWF_6: begin
 							aluFunc = `ALU_XORWF;
 						end
-						default : /* default */;
 					endcase
 				end
 				else if (instIn[11:10] == 2'b01) begin 
@@ -118,9 +108,6 @@ module decoder (
 						end
 						`I_BSF_4: begin 
 							aluFunc = `ALU_BSF;
-						end
-						default : begin
-							aluFunc = `ALU_IDLE;
 						end
 					endcase
 				end
@@ -135,7 +122,6 @@ module decoder (
 						`I_XORLW_4: begin
 							aluFunc = `ALU_XORLW;
 						end
-						default : /* default */;
 					endcase
 				end
 			end
@@ -205,7 +191,7 @@ module decoder (
 				end
 				else begin
 					casex(instIn[11:8])
-						`I_ANDLW_4, `I_ORLW_4, `I_XORLW_4: begin
+						`I_ANDLW_4, `I_IORLW_4, `I_XORLW_4: begin
 							nextExecuteState = `EX_Q4_ALUXLW;
 						end
 						`I_MOVLW_4: begin
@@ -240,7 +226,7 @@ module decoder (
 	end
 
 	always @(*) begin
-		case (currentExecuteState)
+		case (currentFetchState)
 			`FE_Q1_INCPC: begin 
 				nextFetchState = `FE_Q2_IDLE;
 			end
@@ -253,7 +239,6 @@ module decoder (
 			`FE_Q4_FETCH: begin 
 				nextFetchState = `FE_Q1_INCPC;
 			end
-			default : nextFetchState = `FE_Q1_INCPC;
 		endcase
 	end
 
