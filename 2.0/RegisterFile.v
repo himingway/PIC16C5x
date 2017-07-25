@@ -119,9 +119,14 @@ module RegisterFile (
 				// portA <= `IO_A_WIDTH'b0000;
 				// portB <= `IO_B_WIDTH'b0000_0000;
 				// portC <= `IO_C_WIDTH'b0000_0000;
-				for(index = 8 ; index < 16 ; index = index + 1) begin
-					GPR[index] <= `DATA_WIDTH'b0000_0000;
-				end
+				GPR[8]  <= `DATA_WIDTH'b0000_0000;
+				GPR[9]  <= `DATA_WIDTH'b0000_0000;
+				GPR[10] <= `DATA_WIDTH'b0000_0000;
+				GPR[11] <= `DATA_WIDTH'b0000_0000;
+				GPR[12] <= `DATA_WIDTH'b0000_0000;
+				GPR[13] <= `DATA_WIDTH'b0000_0000;
+				GPR[14] <= `DATA_WIDTH'b0000_0000;
+				GPR[15] <= `DATA_WIDTH'b0000_0000;
 		end
 		else begin 
 			case (writeCommand)
