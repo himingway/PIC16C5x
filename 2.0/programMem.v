@@ -11,7 +11,7 @@ module programMem (
 	output [`INST_WIDTH - 1:0] programMemOut // programMem out
 );
 	
-	reg [`INST_WIDTH - 1:0] programMem;
+	reg [`INST_WIDTH - 1:0] programMem [511:0];
 
 	assign programMemOut = programMem [PCIn];
 	initial begin
