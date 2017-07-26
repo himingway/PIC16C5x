@@ -97,19 +97,18 @@ reg [`ALU_STATUS_WIDTH - 1:0] status;
 
 assign aluStatusOut = status;
 
-always@(*) begin
-	if(ALU_En) begin 
-		case (funcIn)
-			`ALU_ADDWF,`ALU_SUBWF: begin
-				status = {(result == 8'b0), 1'b0, 1'b0} | {1'b0, C3, carry};
-			end
-			`ALU_RLF, `ALU_RRF: begin
-				status = statusIn | {1'b0, 1'b0, carry};
-			end
-			default: begin
-				status = {(result == 8'b0), statusIn[1:0]};
-			end
-		endcase
-	end
+always@(posedge ALU_En) begin
+	case (funcIn)
+		`ALU_ADDWF,`ALU_SUBWF: begin
+			status = {(result == 8'b0), 1'b0, 1'b0} | {1'b0, C3, carry};
+		end
+		`ALU_RLF, `ALU_RRF: begin
+			status = statusIn | {1'b0, 1'b0, carry};
+		end
+		default: begin
+			status = {(result == 8'b0), statusIn[1:0]};
+		end
+	endcase
 end
+
 endmodule
