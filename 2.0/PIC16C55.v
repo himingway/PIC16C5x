@@ -37,6 +37,7 @@ wire[`IO_B_WIDTH - 1:0] portB;
 wire[`IO_C_WIDTH - 1:0] portC;
 wire [1:0] stackCommand;
 wire ALU_En;
+wire Read_En;
 wire goto;
 wire skip;
 
@@ -106,7 +107,8 @@ ControlUnit CU_I(
 	.executeState(executeState),
 	.aluFuncOut  (aluFunc),
 	.stackCommand(stackCommand),
-	.ALU_En      (ALU_En)
+	.ALU_En      (ALU_En),
+	.Read_En     (Read_En)
 );
 
 ALU ALU_I (
@@ -151,6 +153,7 @@ RegisterFile RegFile_I(
 	.portBIn     (portBIO),
 	.portCIn     (portCIO),
 	.pcIn        (PC),
+	.Read_En     (Read_En),
 	// OUT
 	.fsrOut      (gprFSR),
 	.regfileOut  (gpr),

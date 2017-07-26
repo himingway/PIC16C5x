@@ -6,22 +6,23 @@
 
 `include "define.v"
 module RegisterFile (
-	input                    clk         , // Clock
-	input                    rst         , // Asynchronous reset active low
-	input  [            2:0] writeCommand,
-	input  [            4:0] fileAddr    ,
-	input  [`DATA_WIDTH-1:0] writeDataIn ,
-	input  [`DATA_WIDTH-1:0] statusIn    ,
-	input  [`IO_A_WIDTH-1:0] portAIn     ,
-	input  [`IO_B_WIDTH-1:0] portBIn     ,
-	input  [`IO_C_WIDTH-1:0] portCIn     ,
-	input  [  `PC_WIDTH-1:0] pcIn        ,
-	output [`DATA_WIDTH-1:0] fsrOut      , // First Select Register out
-	output [`DATA_WIDTH-1:0] regfileOut  , // regfile out
-	output [`DATA_WIDTH-1:0] statusOut   , //status out
-	output [`IO_A_WIDTH-1:0] portAOut    ,
-	output [`IO_B_WIDTH-1:0] portBOut    ,
-	output [`IO_C_WIDTH-1:0] portCOut
+	input                       clk         , // Clock
+	input                       rst         , // Asynchronous reset active low
+	input  [               2:0] writeCommand,
+	input  [               4:0] fileAddr    ,
+	input  [   `DATA_WIDTH-1:0] writeDataIn ,
+	input  [   `DATA_WIDTH-1:0] statusIn    ,
+	input  [   `IO_A_WIDTH-1:0] portAIn     ,
+	input  [   `IO_B_WIDTH-1:0] portBIn     ,
+	input  [   `IO_C_WIDTH-1:0] portCIn     ,
+	input  [     `PC_WIDTH-1:0] pcIn        ,
+	input                       Read_En     ,
+	output [   `DATA_WIDTH-1:0] fsrOut      , // First Select Register out
+	output [   `DATA_WIDTH-1:0] regfileOut  , // regfile out
+	output [   `DATA_WIDTH-1:0] statusOut   , //status out
+	output [   `IO_A_WIDTH-1:0] portAOut    ,
+	output [   `IO_B_WIDTH-1:0] portBOut    ,
+	output [   `IO_C_WIDTH-1:0] portCOut
 );
 
 // Reg
@@ -47,76 +48,81 @@ assign portCOut = portC;
 
 // fsr indirect read
 always @(*) begin
-	case (FSReg[4:0])
-		`ADDR_INDF: begin
-			indirect = `DATA_WIDTH'b0;
-		end
-		`ADDR_TMR0: begin
-			indirect = `DATA_WIDTH'b0;
-		end
-		`ADDR_PCL: begin
-			indirect = pcIn[7:0];
-		end
-		`ADDR_STATUS: begin
-			indirect = status;
-		end
-		`ADDR_FSR: begin
-			indirect = FSReg;
-		end
-		`ADDR_PORTA: begin
-			indirect = {4'b0000, portAIn};
-		end
-		`ADDR_PORTB: begin
-			indirect = portBIn;
-		end
-		`ADDR_PORTC: begin
-			indirect = portCIn;
-		end
-		5'h08, 5'h09,	5'h0A, 5'h0B,	5'h0C,5'h0D, 
-		5'h0E, 5'h0F, 5'h10, 5'h11, 5'h12, 5'h13, 
-		5'h14,5'h15, 5'h16, 5'h17, 5'h18,	5'h19, 
-		5'h1A, 5'h1B, 5'h1C, 5'h1D, 5'h1E, 5'h1F:begin
-			indirect = GPR[FSReg[4:0]];
-		end
-		default: ;
-	endcase
+	if(Read_En) begin 
+		case (FSReg[4:0])
+			`ADDR_INDF: begin
+				indirect = `DATA_WIDTH'b0;
+			end
+			`ADDR_TMR0: begin
+				indirect = `DATA_WIDTH'b0;
+			end
+			`ADDR_PCL: begin
+				indirect = pcIn[7:0];
+			end
+			`ADDR_STATUS: begin
+				indirect = status;
+			end
+			`ADDR_FSR: begin
+				indirect = FSReg;
+			end
+			`ADDR_PORTA: begin
+				indirect = {4'b0000, portAIn};
+			end
+			`ADDR_PORTB: begin
+				indirect = portBIn;
+			end
+			`ADDR_PORTC: begin
+				indirect = portCIn;
+			end
+			5'h08, 5'h09,	5'h0A, 5'h0B,	5'h0C,5'h0D, 
+			5'h0E, 5'h0F, 5'h10, 5'h11, 5'h12, 5'h13, 
+			5'h14,5'h15, 5'h16, 5'h17, 5'h18,	5'h19, 
+			5'h1A, 5'h1B, 5'h1C, 5'h1D, 5'h1E, 5'h1F:begin
+				indirect = GPR[FSReg[4:0]];
+			end
+			default: ;
+		endcase
+	end
+
 end
 
 // fsr direct read
 always @(*) begin
-	case (fileAddr)
-		`ADDR_INDF: begin
-			direct = `DATA_WIDTH'bX;
-		end
-		`ADDR_TMR0: begin
-			direct = `DATA_WIDTH'bX;
-		end
-		`ADDR_PCL: begin
-			direct = pcIn[7:0];
-		end
-		`ADDR_STATUS: begin
-			direct = status;
-		end
-		`ADDR_FSR: begin
-			direct = FSReg;
-		end
-		`ADDR_PORTA: begin
-			direct = {4'b0000, portAIn};
-		end
-		`ADDR_PORTB: begin
-			direct = portBIn;
-		end
-		`ADDR_PORTC: begin
-			direct = portCIn;
-		end
-		5'h08, 5'h09,	5'h0A, 5'h0B,	5'h0C,5'h0D, 
-		5'h0E, 5'h0F, 5'h10, 5'h11, 5'h12, 5'h13, 
-		5'h14,5'h15, 5'h16, 5'h17, 5'h18,	5'h19, 
-		5'h1A, 5'h1B, 5'h1C, 5'h1D, 5'h1E, 5'h1F: begin
-			direct = GPR[fileAddr];
-		end
-		default: ;
-	endcase
+	if (Read_En) begin 
+		case (fileAddr)
+			`ADDR_INDF: begin
+				direct = `DATA_WIDTH'bX;
+			end
+			`ADDR_TMR0: begin
+				direct = `DATA_WIDTH'bX;
+			end
+			`ADDR_PCL: begin
+				direct = pcIn[7:0];
+			end
+			`ADDR_STATUS: begin
+				direct = status;
+			end
+			`ADDR_FSR: begin
+				direct = FSReg;
+			end
+			`ADDR_PORTA: begin
+				direct = {4'b0000, portAIn};
+			end
+			`ADDR_PORTB: begin
+				direct = portBIn;
+			end
+			`ADDR_PORTC: begin
+				direct = portCIn;
+			end
+			5'h08, 5'h09,	5'h0A, 5'h0B,	5'h0C,5'h0D, 
+			5'h0E, 5'h0F, 5'h10, 5'h11, 5'h12, 5'h13, 
+			5'h14,5'h15, 5'h16, 5'h17, 5'h18,	5'h19, 
+			5'h1A, 5'h1B, 5'h1C, 5'h1D, 5'h1E, 5'h1F: begin
+				direct = GPR[fileAddr];
+			end
+			default: ;
+		endcase
+	end
 end
 
 integer index;

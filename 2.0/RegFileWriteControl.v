@@ -73,6 +73,7 @@ always @(*) begin
 			statusWriteData = {gprStatusIn[7:3], 1'b1, gprStatusIn[1:0]};
 		end
 		`EX_Q4_ALUXLW,
+		`EX_Q4_MOVF,
 		`EX_Q4_ELSE: begin
 			writeStatusEn = 1'b1;
 			statusWriteData = {gprStatusIn[7:3], aluStatusIn};

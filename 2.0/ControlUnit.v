@@ -14,7 +14,8 @@ module ControlUnit (
 	output [ `EX_STATE_BITS-1:0] executeState, // Execute State
 	output [`ALU_FUNC_WIDTH-1:0] aluFuncOut  , // ALU out
 	output [1:0] stackCommand                , // Stack control command
-	output ALU_En                              // Enable ALU calculation
+	output ALU_En                            , // Enable ALU calculation
+	output Read_En 
 );
 
 
@@ -81,6 +82,7 @@ always @(*) begin
 				`I_SUBWF_6           : aluFunc = `ALU_SUBWF;
 				`I_SWAPF_6           : aluFunc = `ALU_SWAPF;
 				`I_XORWF_6           : aluFunc = `ALU_XORWF;
+				`I_MOVF_6            : aluFunc = `ALU_MOVF;	
 				{`I_BCF_4   , 2'bxx} : aluFunc = `ALU_BCF;
 				{`I_BSF_4   , 2'bxx} : aluFunc = `ALU_BSF;
 				{`I_ANDLW_4 , 2'bxx} : aluFunc = `ALU_ANDLW;
@@ -198,16 +200,20 @@ always @(*) begin
 end
 
 reg rALU_En;
+reg rRead_En;
 assign ALU_En = rALU_En;
+assign Read_En = rRead_En;
 
 //next fetch state logic
 always @(currentFetchState) begin
 	rALU_En = 1'b0;
+	rRead_En = 1'b0;
 	case (currentFetchState)
 		`FE_Q1: begin
 			nextFetchState = `FE_Q2;
 		end
 		`FE_Q2: begin
+			rRead_En = 1'b1;
 			nextFetchState = `FE_Q3;
 		end
 		`FE_Q3: begin

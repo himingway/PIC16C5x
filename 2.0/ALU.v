@@ -80,6 +80,9 @@ always @(*) begin
 		`ALU_XORLW: begin
 			result = lIn ^ wIn;
 		end
+		`ALU_MOVF : begin 
+			result = fIn;
+		end
 		`ALU_IDLE: begin
 			result = 8'hEF;
 		end
