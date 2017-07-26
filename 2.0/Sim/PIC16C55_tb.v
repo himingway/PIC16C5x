@@ -28,6 +28,7 @@ PIC16C55 i1 (
 );
 
 initial begin
+	clk = 1;
 	rst_n = 1;
 	#5 rst_n = 0;
 	#20 rst_n = 1;
