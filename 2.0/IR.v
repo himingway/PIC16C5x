@@ -4,6 +4,8 @@
 * @File Name: IR.v
 */
 
+`include "define.v"
+
 module IR (
 	input                       clk         , // Clock
 	input                       rst_n       , // Asynchronous reset active low

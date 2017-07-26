@@ -8,10 +8,10 @@
 
 module PIC16C55 (
 	input clk,    // Clock
-	input rst_n   // Asynchronous reset active low
-	// inout[`IO_A_WIDTH - 1:0] portAIO,
-	// inout[`IO_B_WIDTH - 1:0] portBIO,
-	// inout[`IO_C_WIDTH - 1:0] portCIO
+	input rst_n,   // Asynchronous reset active low
+	inout[`IO_A_WIDTH - 1:0] portAIO,
+	inout[`IO_B_WIDTH - 1:0] portBIO,
+	inout[`IO_C_WIDTH - 1:0] portCIO
 );
 
 // wire clk;
@@ -32,13 +32,29 @@ wire [`INST_WIDTH - 1:0] programMem;
 wire [`ALU_FUNC_WIDTH-1:0] aluFunc;
 wire [`DATA_WIDTH-1:0] gprWriteData;
 wire [`DATA_WIDTH-1:0] statusWriteData;
+wire[`IO_A_WIDTH - 1:0] portA;
+wire[`IO_B_WIDTH - 1:0] portB;
+wire[`IO_C_WIDTH - 1:0] portC;
 wire [1:0] stackCommand;
+wire ALU_En;
 wire goto;
 wire skip;
 
-assign stackCommand = 
-						executeState == `EX_Q4_CALL ? 
-						`STK_PUSH : (executeState == `EX_Q4_RETLW ? `STK_POP : `STK_NOP);
+port port_I(
+	// IN
+	.clk         (clk),
+	.rst_n       (rst_n),
+	.executeState(executeState),
+	.IR          (IR),
+	.WRIn        (W),
+	.portAIn     (portA),
+	.portBIn     (portB),
+	.portCIn     (portC),
+	// OUT
+	.portAO     (portAIO),
+	.portBO     (portBIO),
+	.portCO     (portCIO)
+);
 
 PC PC_I(
 	// IN
@@ -88,7 +104,9 @@ ControlUnit CU_I(
 	// OUR
 	.fetchState  (fetchState),
 	.executeState(executeState),
-	.aluFuncOut  (aluFunc)
+	.aluFuncOut  (aluFunc),
+	.stackCommand(stackCommand),
+	.ALU_En      (ALU_En)
 );
 
 ALU ALU_I (
@@ -99,6 +117,8 @@ ALU ALU_I (
 	.funcIn      (aluFunc),
 	.bitSel      (IR[7:5]),
 	.cFlag       (gprStatus[0]),
+	.ALU_En      (ALU_En),
+	.statusIn    (gprStatus[3:0]),
 	// OUT
 	.aluStatusOut(aluStatus),
 	.aluResultOut(aluResult)
@@ -127,11 +147,17 @@ RegisterFile RegFile_I(
 	.fileAddr    (IR[4:0]),
 	.writeDataIn (gprWriteData),
 	.statusIn    (statusWriteData),
+	.portAIn     (portAIO),
+	.portBIn     (portBIO),
+	.portCIn     (portCIO),
 	.pcIn        (PC),
 	// OUT
 	.fsrOut      (gprFSR),
 	.regfileOut  (gpr),
-	.statusOut   (gprStatus)
+	.statusOut   (gprStatus),
+	.portAOut    (portA),
+	.portBOut    (portB),
+	.portCOut    (portC)
 );
 
 wRegWriteControl wRegWC_I(

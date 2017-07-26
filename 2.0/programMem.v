@@ -4,10 +4,12 @@
 * @File Name: programMem.v
 */
 
+`include "define.v"
+
 module programMem (
 	// input clk,    // Clock
 	// input rst_n,  // Asynchronous reset active low
-	input PCIn,
+	input [`PC_WIDTH-1:0] PCIn,
 	output [`INST_WIDTH - 1:0] programMemOut // programMem out
 );
 	

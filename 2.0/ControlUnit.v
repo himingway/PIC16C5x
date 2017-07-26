@@ -7,12 +7,14 @@
 `include "define.v"
 
 module ControlUnit (
-	input clk,                                 // Clock
-	input rst_n,                               // Asynchronous reset active low
-	input[`INST_WIDTH - 1 : 0] instIn,           // Instruction in
-	output[`FE_STATE_BITS  - 1  : 0] fetchState,   // Fetch state
-	output[`EX_STATE_BITS  - 1  : 0] executeState, // Execute State
-	output[`ALU_FUNC_WIDTH - 1  : 0] aluFuncOut   // ALU out
+	input                        clk         , // Clock
+	input                        rst_n       , // Asynchronous reset active low
+	input  [    `INST_WIDTH-1:0] instIn      , // Instruction in
+	output [ `FE_STATE_BITS-1:0] fetchState  , // Fetch state
+	output [ `EX_STATE_BITS-1:0] executeState, // Execute State
+	output [`ALU_FUNC_WIDTH-1:0] aluFuncOut  , // ALU out
+	output [1:0] stackCommand                , // Stack control command
+	output ALU_En                              // Enable ALU calculation
 );
 
 
@@ -25,6 +27,10 @@ reg[`EX_STATE_BITS - 1 : 0] nextExecuteState;
 //execute, fetch state transition
 assign fetchState = currentFetchState;
 assign executeState = currentExecuteState;
+
+assign stackCommand = 
+						currentExecuteState == `EX_Q4_CALL ? 
+						`STK_PUSH : (currentExecuteState == `EX_Q4_RETLW ? `STK_POP : `STK_NOP);
 
 always @(posedge clk) begin
 	if(!rst_n) begin
@@ -39,6 +45,7 @@ end
 
 //ALU function loading
 reg[`ALU_FUNC_WIDTH - 1 : 0] aluFuncRetain;
+reg [`ALU_FUNC_WIDTH - 1 : 0] aluFunc;
 
 assign aluFuncOut = aluFuncRetain;
 
@@ -52,7 +59,6 @@ always @(posedge clk) begin
 end
 
 //Next execute state logic
-reg [`ALU_FUNC_WIDTH - 1 : 0] aluFunc;
 always @(*) begin
 	aluFunc = `ALU_IDLE;
 	case (currentExecuteState)
@@ -191,8 +197,12 @@ always @(*) begin
 	endcase
 end
 
+reg rALU_En;
+assign ALU_En = rALU_En;
+
 //next fetch state logic
 always @(currentFetchState) begin
+	rALU_En = 1'b0;
 	case (currentFetchState)
 		`FE_Q1: begin
 			nextFetchState = `FE_Q2;
@@ -202,6 +212,7 @@ always @(currentFetchState) begin
 		end
 		`FE_Q3: begin
 			nextFetchState = `FE_Q4;
+			rALU_En = 1'b1;
 		end
 		`FE_Q4: begin
 			nextFetchState = `FE_Q1;

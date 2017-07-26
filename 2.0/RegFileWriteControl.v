@@ -19,10 +19,6 @@ module RegFileWriteControl (
 	output [      `DATA_WIDTH-1:0] statusWriteDataOut  // Status Write Data
 );
 
-assign writeCommand = {executeState == `EX_Q2, // write FSR
-	                       gprwriteQ4En, // write Q4 result to the register pointed to by FSR
-	                       writeStatusEn};  // write status
-
 // WriteData Decision
 reg gprwriteQ4En;
 reg [`DATA_WIDTH-1:0] gprwriteData;
@@ -87,4 +83,8 @@ always @(*) begin
 		end
 	endcase
 end
+
+assign writeCommand = {executeState == `EX_Q2, // write FSR
+	                       gprwriteQ4En, // write Q4 result to the register pointed to by FSR
+	                       writeStatusEn};  // write status
 endmodule

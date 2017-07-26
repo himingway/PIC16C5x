@@ -140,4 +140,9 @@
 `define ADDR_PORTB  5'b0_0110
 `define ADDR_PORTC  5'b0_0111
 
+// Port
+`define IO_A_WIDTH         4
+`define IO_B_WIDTH         8
+`define IO_C_WIDTH         8
+
 `endif 

@@ -13,6 +13,8 @@ module ALU (
 	input  [  `ALU_FUNC_WIDTH-1:0] funcIn      , // alu function in
 	input  [                  2:0] bitSel      , // bit selection in
 	input                          cFlag       , // carry flag in(for RRF, RLF instruction)
+	input                          ALU_En      ,
+	input  [`ALU_STATUS_WIDTH-1:0] statusIn    , // status in
 	output [`ALU_STATUS_WIDTH-1:0] aluStatusOut, // alu status out {zero, digit carry, carry}
 	output [  `ALU_DATA_WIDTH-1:0] aluResultOut  // alu result out
 );
@@ -33,8 +35,8 @@ always @(*) begin
 			{carry,result[7:4]} = fIn [7:4] + wIn[7:4] + C3;
 		end
 		`ALU_SUBWF: begin // SUB w form f
-			{C3,result} = fIn[3:0] - wIn[3:0];
-			{carry,result} = fIn[7:4] - wIn[7:4] - C3;
+			{C3,result[3:0]} = fIn[3:0] - wIn[3:0];
+			{carry,result[7:4]} = fIn[7:4] - wIn[7:4] - C3;
 		end
 		`ALU_ANDWF: begin // AND w with f
 			result = wIn & fIn;
@@ -75,11 +77,14 @@ always @(*) begin
 		`ALU_IORLW: begin // Inclusive Or Literal in W
 			result = lIn | wIn;
 		end
+		`ALU_XORLW: begin
+			result = lIn ^ wIn;
+		end
 		`ALU_IDLE: begin
-			result = 8'b0;
+			result = 8'hEF;
 		end
 		default: begin
-			result = 8'b0;
+			result = 8'hEF;
 		end
 	endcase
 end
@@ -90,18 +95,18 @@ reg [`ALU_STATUS_WIDTH - 1:0] status;
 assign aluStatusOut = status;
 
 always@(*) begin
-	status = {(result == 8'b0), 1'b0, 1'b0};
-	case (funcIn)
-		`ALU_ADDWF,`ALU_SUBWF: begin
-			status = status | {1'b0, C3, carry};
-		end
-		`ALU_RLF, `ALU_RRF: begin
-			status = status | {1'b0, 1'b0, carry};
-		end
-		default: begin
-			status = {(result == 8'b0), 1'b0, 1'b0};
-		end
-	endcase
+	if(ALU_En) begin 
+		case (funcIn)
+			`ALU_ADDWF,`ALU_SUBWF: begin
+				status = {(result == 8'b0), 1'b0, 1'b0} | {1'b0, C3, carry};
+			end
+			`ALU_RLF, `ALU_RRF: begin
+				status = statusIn | {1'b0, 1'b0, carry};
+			end
+			default: begin
+				status = {(result == 8'b0), statusIn[1:0]};
+			end
+		endcase
+	end
 end
-
 endmodule
