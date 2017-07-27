@@ -151,7 +151,6 @@ RegisterFile RegFile_I(
 	.portBIn     (portBIO),
 	.portCIn     (portCIO),
 	.pcIn        (PC),
-	.Read_En     (En),
 	// OUT
 	.fsrOut      (gprFSR),
 	.regfileOut  (gpr),
