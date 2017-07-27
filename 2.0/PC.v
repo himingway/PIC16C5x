@@ -100,6 +100,8 @@ always @(posedge clk) begin
 				end
 				`EX_Q4_GOTO: begin
 					rPC <= IR[8:0];
+					rskip <= 1;
+					rgoto <= 1;
 				end
 				`EX_Q4_MOVLW: begin
 				end
