@@ -16,7 +16,6 @@ module RegisterFile (
 	input  [   `IO_B_WIDTH-1:0] portBIn     ,
 	input  [   `IO_C_WIDTH-1:0] portCIn     ,
 	input  [     `PC_WIDTH-1:0] pcIn        ,
-	input                       Read_En     ,
 	output [   `DATA_WIDTH-1:0] fsrOut      , // First Select Register out
 	output [   `DATA_WIDTH-1:0] regfileOut  , // regfile out
 	output [   `DATA_WIDTH-1:0] statusOut   , //status out
@@ -47,7 +46,7 @@ assign portBOut = portB;
 assign portCOut = portC;
 
 // fsr indirect read
-always @(posedge Read_En) begin
+always @(*) begin
 	case (FSReg[4:0])
 		`ADDR_INDF: begin
 			indirect = `DATA_WIDTH'b0;
@@ -84,7 +83,7 @@ always @(posedge Read_En) begin
 end
 
 // fsr direct read
-always @(posedge Read_En) begin
+always @(*) begin
 	case (fileAddr)
 		`ADDR_INDF: begin
 			direct = `DATA_WIDTH'bX;
