@@ -20,9 +20,9 @@ module PC (
 	input  [        `PC_WIDTH-1:0] stackIn     , // Stack in
 	input  [                  2:0] writeCommand, // GPR write command
 	input  [      `DATA_WIDTH-1:0] gprFSRIn    , // gprFSRIn
-	output [        `PC_WIDTH-1:0] PC          ,  // PC Register out
-	output goto,
-	output skip
+	output [        `PC_WIDTH-1:0] PC          , // PC Register out
+	output                         goto        ,
+	output                         skip
 );
 
 reg[`PC_WIDTH-1:0] rPC;

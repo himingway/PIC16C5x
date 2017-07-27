@@ -7,8 +7,8 @@
 `include "define.v"
 
 module PIC16C55 (
-	input clk,    // Clock
-	input rst_n,   // Asynchronous reset active low
+	input clk  , // Clock
+	input rst_n, // Asynchronous reset active low
 	inout[`IO_A_WIDTH - 1:0] portAIO,
 	inout[`IO_B_WIDTH - 1:0] portBIO,
 	inout[`IO_C_WIDTH - 1:0] portCIO

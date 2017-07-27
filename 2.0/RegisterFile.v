@@ -6,22 +6,22 @@
 
 `include "define.v"
 module RegisterFile (
-	input                       clk         , // Clock
-	input                       rst         , // Asynchronous reset active low
-	input  [               2:0] writeCommand,
-	input  [               4:0] fileAddr    ,
-	input  [   `DATA_WIDTH-1:0] writeDataIn ,
-	input  [   `DATA_WIDTH-1:0] statusIn    ,
-	input  [   `IO_A_WIDTH-1:0] portAIn     ,
-	input  [   `IO_B_WIDTH-1:0] portBIn     ,
-	input  [   `IO_C_WIDTH-1:0] portCIn     ,
-	input  [     `PC_WIDTH-1:0] pcIn        ,
-	output [   `DATA_WIDTH-1:0] fsrOut      , // First Select Register out
-	output [   `DATA_WIDTH-1:0] regfileOut  , // regfile out
-	output [   `DATA_WIDTH-1:0] statusOut   , //status out
-	output [   `IO_A_WIDTH-1:0] portAOut    ,
-	output [   `IO_B_WIDTH-1:0] portBOut    ,
-	output [   `IO_C_WIDTH-1:0] portCOut
+	input                    clk         , // Clock
+	input                    rst         , // Asynchronous reset active low
+	input  [            2:0] writeCommand,
+	input  [            4:0] fileAddr    ,
+	input  [`DATA_WIDTH-1:0] writeDataIn ,
+	input  [`DATA_WIDTH-1:0] statusIn    ,
+	input  [`IO_A_WIDTH-1:0] portAIn     ,
+	input  [`IO_B_WIDTH-1:0] portBIn     ,
+	input  [`IO_C_WIDTH-1:0] portCIn     ,
+	input  [  `PC_WIDTH-1:0] pcIn        ,
+	output [`DATA_WIDTH-1:0] fsrOut      , // First Select Register out
+	output [`DATA_WIDTH-1:0] regfileOut  , // regfile out
+	output [`DATA_WIDTH-1:0] statusOut   , //status out
+	output [`IO_A_WIDTH-1:0] portAOut    ,
+	output [`IO_B_WIDTH-1:0] portBOut    ,
+	output [`IO_C_WIDTH-1:0] portCOut
 );
 
 // Reg
@@ -32,7 +32,7 @@ reg[`IO_B_WIDTH - 1:0] portB;
 reg[`IO_C_WIDTH - 1:0] portC;
 
 reg[`DATA_WIDTH - 1:0] indirect; // not real register
-reg[`DATA_WIDTH - 1:0] direct; // not real register
+reg[`DATA_WIDTH - 1:0] direct;   // not real register
 
 // MEM
 reg [`DATA_WIDTH - 1:0] GPR [15:8];
@@ -72,9 +72,9 @@ always @(*) begin
 		`ADDR_PORTC: begin
 			indirect = portCIn;
 		end
-		5'h08, 5'h09,	5'h0A, 5'h0B,	5'h0C,5'h0D, 
+		5'h08, 5'h09, 5'h0A, 5'h0B, 5'h0C,5'h0D, 
 		5'h0E, 5'h0F, 5'h10, 5'h11, 5'h12, 5'h13, 
-		5'h14,5'h15, 5'h16, 5'h17, 5'h18,	5'h19, 
+		5'h14,5'h15, 5'h16, 5'h17, 5'h18, 5'h19, 
 		5'h1A, 5'h1B, 5'h1C, 5'h1D, 5'h1E, 5'h1F:begin
 			indirect = GPR[FSReg[4:0]];
 		end
@@ -109,9 +109,9 @@ always @(*) begin
 		`ADDR_PORTC: begin
 			direct = portCIn;
 		end
-		5'h08, 5'h09,	5'h0A, 5'h0B,	5'h0C,5'h0D, 
+		5'h08, 5'h09, 5'h0A, 5'h0B, 5'h0C,5'h0D, 
 		5'h0E, 5'h0F, 5'h10, 5'h11, 5'h12, 5'h13, 
-		5'h14,5'h15, 5'h16, 5'h17, 5'h18,	5'h19, 
+		5'h14,5'h15, 5'h16, 5'h17, 5'h18, 5'h19, 
 		5'h1A, 5'h1B, 5'h1C, 5'h1D, 5'h1E, 5'h1F: begin
 			direct = GPR[fileAddr];
 		end
@@ -167,9 +167,9 @@ always@(posedge clk or negedge rst) begin
 							`ADDR_PORTC: begin
 								portC <= writeDataIn;
 							end
-							5'h08, 5'h09,	5'h0A, 5'h0B,	5'h0C,5'h0D, 
+							5'h08, 5'h09, 5'h0A, 5'h0B, 5'h0C,5'h0D, 
 							5'h0E, 5'h0F, 5'h10, 5'h11, 5'h12, 5'h13, 
-							5'h14,5'h15, 5'h16, 5'h17, 5'h18,	5'h19, 
+							5'h14,5'h15, 5'h16, 5'h17, 5'h18, 5'h19, 
 							5'h1A, 5'h1B, 5'h1C, 5'h1D, 5'h1E, 5'h1F: begin
 								GPR[FSReg[4:0]] = writeDataIn;
 							end
@@ -195,9 +195,9 @@ always@(posedge clk or negedge rst) begin
 					`ADDR_PORTC: begin
 						portC <= writeDataIn;
 					end
-					5'h08, 5'h09,	5'h0A, 5'h0B,	5'h0C,5'h0D, 
+					5'h08, 5'h09, 5'h0A, 5'h0B,	5'h0C,5'h0D, 
 					5'h0E, 5'h0F, 5'h10, 5'h11, 5'h12, 5'h13, 
-					5'h14,5'h15, 5'h16, 5'h17, 5'h18,	5'h19, 
+					5'h14,5'h15, 5'h16, 5'h17, 5'h18, 5'h19, 
 					5'h1A, 5'h1B, 5'h1C, 5'h1D, 5'h1E, 5'h1F: begin
 						GPR[fileAddr] = writeDataIn;
 					end

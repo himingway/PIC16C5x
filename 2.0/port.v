@@ -7,18 +7,17 @@
 `include "define.v"
 
 module port (
-	input clk,    // Clock
-	input rst_n,  // Asynchronous reset active low
-	input [ `EX_STATE_BITS-1:0] executeState,
-	input [`INST_WIDTH-1:0] IR,
-	input [`DATA_WIDTH-1:0] WRIn,
-	input [`IO_A_WIDTH-1:0] portAIn,
-	input [`IO_B_WIDTH-1:0] portBIn,
-	input [`IO_C_WIDTH-1:0] portCIn,
-
-	output [`IO_A_WIDTH-1:0] portAO,
-	output [`IO_B_WIDTH-1:0] portBO,
-	output [`IO_C_WIDTH-1:0] portCO
+	input                       clk         , // Clock
+	input                       rst_n       , // Asynchronous reset active low
+	input  [`EX_STATE_BITS-1:0] executeState,
+	input  [   `INST_WIDTH-1:0] IR          ,
+	input  [   `DATA_WIDTH-1:0] WRIn        ,
+	input  [   `IO_A_WIDTH-1:0] portAIn     ,
+	input  [   `IO_B_WIDTH-1:0] portBIn     ,
+	input  [   `IO_C_WIDTH-1:0] portCIn     ,
+	output [   `IO_A_WIDTH-1:0] portAO      ,
+	output [   `IO_B_WIDTH-1:0] portBO      ,
+	output [   `IO_C_WIDTH-1:0] portCO
 );
 
 reg [`IO_A_WIDTH-1:0] trisAReg;
