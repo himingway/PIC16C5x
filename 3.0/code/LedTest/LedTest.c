@@ -2,7 +2,9 @@
 #include<pic16c55.h>
 #define uchar unsigned char
 #define uint unsigned int
-
+#pragma config OSC = RC         // Oscillator selection bits (RC oscillator)
+#pragma config WDT = OFF        // Watchdog timer enable bit (WDT disabled)
+#pragma config CP = OFF         // Code protection bit (Code protection off)
 void delay(uint x)
 {
 	uint a,b;        
@@ -18,13 +20,13 @@ void main()
 		PORTB=0x01;
 		for(i=8;i>0;i--)
 		{
-			delay(50);
+			delay(500);
 			PORTB=PORTB<<1;
 		}
 		PORTB=0x80;
 		for(i=8;i>0;i--)
 		{
-			delay(50);
+			delay(500);
 			PORTB=PORTB>>1;
 		}
 	}
