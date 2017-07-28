@@ -9,9 +9,9 @@
 module PIC16C55 (
 	input clk  , // Clock
 	input rst_n, // Asynchronous reset active low
-	inout[`IO_A_WIDTH - 1:0] portAIO,
-	inout[`IO_B_WIDTH - 1:0] portBIO,
-	inout[`IO_C_WIDTH - 1:0] portCIO
+	inout [`IO_A_WIDTH - 1:0] portAIO,
+	inout [`IO_B_WIDTH - 1:0] portBIO,
+	inout [`IO_C_WIDTH - 1:0] portCIO
 );
 
 // wire clk;
@@ -32,13 +32,47 @@ wire [`INST_WIDTH - 1:0] programMem;
 wire [`ALU_FUNC_WIDTH-1:0] aluFunc;
 wire [`DATA_WIDTH-1:0] gprWriteData;
 wire [`DATA_WIDTH-1:0] statusWriteData;
-wire[`IO_A_WIDTH - 1:0] portA;
-wire[`IO_B_WIDTH - 1:0] portB;
-wire[`IO_C_WIDTH - 1:0] portC;
+
+wire [`IO_A_WIDTH - 1:0] portA;
+wire [`IO_B_WIDTH - 1:0] portB;
+wire [`IO_C_WIDTH - 1:0] portC;
+wire [`IO_A_WIDTH-1:0] trisAReg;
+wire [`IO_B_WIDTH-1:0] trisBReg;
+wire [`IO_C_WIDTH-1:0] trisCReg;
+
 wire [1:0] stackCommand;
 wire En;
 wire goto;
 wire skip;
+
+
+assign portAIO = {
+	trisAReg[3] ? 1'bz : portA[3],
+	trisAReg[2] ? 1'bz : portA[2],
+	trisAReg[1] ? 1'bz : portA[1],
+	trisAReg[0] ? 1'bz : portA[0]
+};
+assign portBIO = {
+	trisBReg[7] ? 1'bz : portB[7],
+	trisBReg[6] ? 1'bz : portB[6],
+	trisBReg[5] ? 1'bz : portB[5],
+	trisBReg[4] ? 1'bz : portB[4],
+	trisBReg[3] ? 1'bz : portB[3],
+	trisBReg[2] ? 1'bz : portB[2],
+	trisBReg[1] ? 1'bz : portB[1],
+	trisBReg[0] ? 1'bz : portB[0]
+};
+assign portCIO = {
+	trisCReg[7] ? 1'bz : portC[7],
+	trisCReg[6] ? 1'bz : portC[6],
+	trisCReg[5] ? 1'bz : portC[5],
+	trisCReg[4] ? 1'bz : portC[4],
+	trisCReg[3] ? 1'bz : portC[3],
+	trisCReg[2] ? 1'bz : portC[2],
+	trisCReg[1] ? 1'bz : portC[1],
+	trisCReg[0] ? 1'bz : portC[0]
+};
+
 
 port port_I(
 	// IN
@@ -47,13 +81,10 @@ port port_I(
 	.executeState(executeState),
 	.IR          (IR),
 	.WRIn        (W),
-	.portAIn     (portA),
-	.portBIn     (portB),
-	.portCIn     (portC),
 	// OUT
-	.portAO     (portAIO),
-	.portBO     (portBIO),
-	.portCO     (portCIO)
+	.trisAReg    (trisAReg),
+	.trisBReg    (trisBReg),
+	.trisCReg    (trisCReg)
 );
 
 PC PC_I(
