@@ -7,11 +7,11 @@
 `include "define.v"
 
 module stack (
-	input  clk,  // Clock
-	input  rst, // Asynchronous reset   active low
-	input  [1:0] commandIn, // Command input
-	input  [`PC_WIDTH-1:0] in, // Stack in
-	output [`PC_WIDTH-1:0] topOut // Stack out
+	input                  clk      , // Clock
+	input                  rst_n    , // Asynchronous reset   active low
+	input  [          1:0] commandIn, // Command input
+	input  [`PC_WIDTH-1:0] in       , // Stack in
+	output [`PC_WIDTH-1:0] topOut     // Stack out
 );
 
 // Reg
@@ -20,8 +20,8 @@ reg [`PC_WIDTH-1:0] level [1:0];
 
 assign topOut = level[~ptr];
 
-always@(posedge clk or negedge rst) begin 
-	if (!rst) begin 
+always@(posedge clk) begin 
+	if (!rst_n) begin 
 		ptr <= 0;
 		level[0] <= `PC_WIDTH'b0;
 		level[1] <= `PC_WIDTH'b0;

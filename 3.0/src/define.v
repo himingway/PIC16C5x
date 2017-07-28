@@ -1,6 +1,6 @@
 /*
 * @Author:    tmh
-* @Date:      2017-07-17 19:35:39
+* @Date:      2017-07-24 19:22:12
 * @File Name: define.v
 */
 
@@ -10,6 +10,7 @@
 // PORT WIDTH
 `define INST_WIDTH       12
 `define DATA_WIDTH       8
+`define ALU_DATA_WIDTH   8
 `define ALU_STATUS_WIDTH 3
 `define BIT_SEL_WIDTH    3
 `define PC_WIDTH         9
@@ -33,7 +34,8 @@
 `define ALU_ANDLW `ALU_FUNC_WIDTH'b0_1101
 `define ALU_IORLW `ALU_FUNC_WIDTH'b0_1110
 `define ALU_XORLW `ALU_FUNC_WIDTH'b0_1111
-`define ALU_IDLE  `ALU_FUNC_WIDTH'b1_0000
+`define ALU_MOVF  `ALU_FUNC_WIDTH'b1_0000
+`define ALU_IDLE  `ALU_FUNC_WIDTH'b1_1111
 
 // Instructions Set
 `define OP_3BIT_WIDTH 3
@@ -89,19 +91,20 @@
 // Fetch
 `define FE_STATE_BITS   2
 
-`define FE_Q1_INCPC `FE_STATE_BITS'b00
-`define FE_Q2_IDLE  `FE_STATE_BITS'b01
-`define FE_Q3_IDLE  `FE_STATE_BITS'b10
-`define FE_Q4_FETCH `FE_STATE_BITS'b11
+`define FE_Q1 `FE_STATE_BITS'b00
+`define FE_Q2 `FE_STATE_BITS'b01
+`define FE_Q3 `FE_STATE_BITS'b10
+`define FE_Q4 `FE_STATE_BITS'b11
 
 // Execute
 `define EX_STATE_BITS   5
 
-`define EX_Q1_TEST_SKIP `EX_STATE_BITS'b00001 //Q1
-`define EX_Q2_FSR       `EX_STATE_BITS'b00010 //Q2
-`define EX_Q3_ALU       `EX_STATE_BITS'b00100 //Q3
-`define EX_Q4_CLRF      `EX_STATE_BITS'b01000 //Q4
+`define EX_Q1 `EX_STATE_BITS'b00001 // Q1
+`define EX_Q2 `EX_STATE_BITS'b00010 // Q2
+`define EX_Q3 `EX_STATE_BITS'b00100 // Q3
 
+// Q4
+`define EX_Q4_CLRF    `EX_STATE_BITS'b01000 
 `define EX_Q4_CLRW    `EX_STATE_BITS'b01001
 `define EX_Q4_DECF    `EX_STATE_BITS'b01010
 `define EX_Q4_MOVWF   `EX_STATE_BITS'b01011
@@ -112,7 +115,7 @@
 `define EX_Q4_TRIS    `EX_STATE_BITS'b10000
 `define EX_Q4_FSZ     `EX_STATE_BITS'b10001
 `define EX_Q4_SWAPF   `EX_STATE_BITS'b10010
-`define EX_Q4_00_ELSE `EX_STATE_BITS'b10011
+`define EX_Q4_ELSE    `EX_STATE_BITS'b10011
 `define EX_Q4_BXF     `EX_STATE_BITS'b10100
 `define EX_Q4_BTFSX   `EX_STATE_BITS'b10101
 `define EX_Q4_ALUXLW  `EX_STATE_BITS'b10110 //AND, IOR, XOR
@@ -120,7 +123,7 @@
 `define EX_Q4_GOTO    `EX_STATE_BITS'b11000
 `define EX_Q4_CALL    `EX_STATE_BITS'b11001
 `define EX_Q4_RETLW   `EX_STATE_BITS'b11010
-`define EX_Q4_ELSE    `EX_STATE_BITS'b11011
+`define EX_Q4_NOP     `EX_STATE_BITS'b11011
 `define EX_Q4_MOVF    `EX_STATE_BITS'b11100
 
 // Stack
@@ -137,5 +140,10 @@
 `define ADDR_PORTA  5'b0_0101
 `define ADDR_PORTB  5'b0_0110
 `define ADDR_PORTC  5'b0_0111
+
+// Port
+`define IO_A_WIDTH         4
+`define IO_B_WIDTH         8
+`define IO_C_WIDTH         8
 
 `endif 
