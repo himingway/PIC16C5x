@@ -1,4 +1,4 @@
-`timescale 1 ps/ 1 ps
+`timescale 1 ns/ 1 ns
 module PIC16C55_vlg_tst();
 	
 // test vector input registers
@@ -33,14 +33,13 @@ initial begin
 	treg_portCIO = 8'bzzzz_zzzz;
 	clk = 1;
 	rst_n = 1;
-	#5 rst_n = 0;
-	#20 rst_n = 1;
+	#50 rst_n = 0;
+	#200 rst_n = 1;
 	$display("Running testbench");                       
 end   
 
 always begin
-	#10 clk <= ~clk;
+	#100 clk <= ~clk;
 end
 
 endmodule
-
