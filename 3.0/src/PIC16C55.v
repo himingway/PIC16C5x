@@ -148,8 +148,7 @@ ALU ALU_I (
 	.funcIn      (aluFunc),
 	.bitSel      (IR[7:5]),
 	.cFlag       (gprStatus[0]),
-	.ALU_En      (En),
-	.statusIn    (gprStatus[3:0]),
+	.statusIn    (gprStatus[2:0]),
 	// OUT
 	.aluStatusOut(aluStatus),
 	.aluResultOut(aluResult)

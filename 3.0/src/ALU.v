@@ -13,7 +13,6 @@ module ALU (
 	input  [  `ALU_FUNC_WIDTH-1:0] funcIn      , // alu function in
 	input  [                  2:0] bitSel      , // bit selection in
 	input                          cFlag       , // carry flag in(for RRF, RLF instruction)
-	input                          ALU_En      ,
 	input  [`ALU_STATUS_WIDTH-1:0] statusIn    , // status in
 	output [`ALU_STATUS_WIDTH-1:0] aluStatusOut, // alu status out {zero, digit carry, carry}
 	output [  `ALU_DATA_WIDTH-1:0] aluResultOut  // alu result out
@@ -97,7 +96,7 @@ reg [`ALU_STATUS_WIDTH - 1:0] status;
 
 assign aluStatusOut = status;
 
-always@(posedge ALU_En) begin
+always@(*) begin
 	case (funcIn)
 		`ALU_ADDWF:begin 
 			status = {(result == 8'b0), 1'b0, 1'b0} | {1'b0, C3, carry};

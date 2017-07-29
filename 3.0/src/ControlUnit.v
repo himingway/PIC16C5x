@@ -14,7 +14,6 @@ module ControlUnit (
 	output [ `EX_STATE_BITS-1:0] executeState, // Execute State
 	output [`ALU_FUNC_WIDTH-1:0] aluFuncOut  , // ALU out
 	output [                1:0] stackCommand, // Stack control command
-	output                       En            // Enable
 );
 
 
@@ -198,9 +197,6 @@ always @(*) begin
 	endcase
 end
 
-reg rEn;
-assign En = rEn;
-
 //next fetch state logic
 always @(*) begin
 	rEn = 1'b0;
@@ -213,7 +209,6 @@ always @(*) begin
 		end
 		`FE_Q3: begin
 			nextFetchState = `FE_Q4;
-			rEn = 1'b1;
 		end
 		`FE_Q4: begin
 			nextFetchState = `FE_Q1;
