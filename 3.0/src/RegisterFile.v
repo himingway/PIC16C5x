@@ -64,13 +64,13 @@ always @(*) begin
 			indirect = FSReg;
 		end
 		`ADDR_PORTA: begin
-			indirect = {4'b0000, portA};
+			indirect = {4'b0000, portAIn};
 		end
 		`ADDR_PORTB: begin
-			indirect = portB;
+			indirect = portBIn;
 		end
 		`ADDR_PORTC: begin
-			indirect = portC;
+			indirect = portCIn;
 		end
 		5'h08, 5'h09, 5'h0A, 5'h0B, 5'h0C,5'h0D, 
 		5'h0E, 5'h0F, 5'h10, 5'h11, 5'h12, 5'h13, 
@@ -101,13 +101,13 @@ always @(*) begin
 			direct = FSReg;
 		end
 		`ADDR_PORTA: begin
-			direct = {4'b0000, portA};
+			direct = {4'b0000, portAIn};
 		end
 		`ADDR_PORTB: begin
-			direct = portB;
+			direct = portBIn;
 		end
 		`ADDR_PORTC: begin
-			direct = portC;
+			direct = portCIn;
 		end
 		5'h08, 5'h09, 5'h0A, 5'h0B, 5'h0C,5'h0D, 
 		5'h0E, 5'h0F, 5'h10, 5'h11, 5'h12, 5'h13, 
