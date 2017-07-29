@@ -136,7 +136,7 @@ ControlUnit CU_I(
 	.fetchState  (fetchState),
 	.executeState(executeState),
 	.aluFuncOut  (aluFunc),
-	.stackCommand(stackCommand),
+	.stackCommand(stackCommand)
 );
 
 ALU ALU_I (
