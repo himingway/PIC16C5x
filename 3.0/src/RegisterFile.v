@@ -121,13 +121,13 @@ end
 
 integer index;
 // write block
-always@(posedge clk or negedge rst) begin
+always@(posedge clk) begin
 	if(!rst) begin
 			status <= `DATA_WIDTH'b0001_1xxx;
-			FSReg <= `DATA_WIDTH'b0000_0000;
-			portA <= `IO_A_WIDTH'b0000;
-			portB <= `IO_B_WIDTH'b0000_0000;
-			portC <= `IO_C_WIDTH'b0000_0000;
+			FSReg <= `DATA_WIDTH'b1xxx_xxxx;
+			portA <= `IO_A_WIDTH'b0xxxx;
+			portB <= `IO_B_WIDTH'bxxxx_xxxx;
+			portC <= `IO_C_WIDTH'bxxxx_xxxx;
 			GPR[8]  <= `DATA_WIDTH'b0000_0000;
 			GPR[9]  <= `DATA_WIDTH'b0000_0000;
 			GPR[10] <= `DATA_WIDTH'b0000_0000;
@@ -207,9 +207,9 @@ always@(posedge clk or negedge rst) begin
 			3'b001: begin
 				status <= statusIn;
 			end
-			3'b100: begin
-				FSReg <= writeDataIn;
-			end
+			// 3'b100: begin
+			// 	FSReg <= writeDataIn;
+			// end
 			default : /* default */;
 		endcase
 	end

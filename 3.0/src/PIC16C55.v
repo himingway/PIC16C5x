@@ -40,7 +40,7 @@ wire [`IO_A_WIDTH-1:0] trisAReg;
 wire [`IO_B_WIDTH-1:0] trisBReg;
 wire [`IO_C_WIDTH-1:0] trisCReg;
 
-wire [1:0] stackCommand
+wire [1:0] stackCommand;
 wire goto;
 wire skip;
 

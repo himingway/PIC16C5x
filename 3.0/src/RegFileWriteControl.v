@@ -29,7 +29,7 @@ always @(*) begin
 	case (executeState)
 		`EX_Q2: begin
 			gprwriteQ4En = 1'b0;
-			gprwriteData = {3'b000, IR[4:0]};
+			// gprwriteData = {3'b000, IR[4:0]};
 		end
 		`EX_Q4_CLRF: begin 
 			gprwriteQ4En = 1'b1;
