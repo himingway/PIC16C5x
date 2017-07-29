@@ -13,7 +13,7 @@ module ControlUnit (
 	output [ `FE_STATE_BITS-1:0] fetchState  , // Fetch state
 	output [ `EX_STATE_BITS-1:0] executeState, // Execute State
 	output [`ALU_FUNC_WIDTH-1:0] aluFuncOut  , // ALU out
-	output [                1:0] stackCommand, // Stack control command
+	output [                1:0] stackCommand  // Stack control command
 );
 
 
