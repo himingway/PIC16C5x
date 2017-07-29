@@ -199,7 +199,6 @@ end
 
 //next fetch state logic
 always @(*) begin
-	rEn = 1'b0;
 	case (currentFetchState)
 		`FE_Q1: begin
 			nextFetchState = `FE_Q2;

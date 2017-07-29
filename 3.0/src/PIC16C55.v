@@ -137,7 +137,6 @@ ControlUnit CU_I(
 	.executeState(executeState),
 	.aluFuncOut  (aluFunc),
 	.stackCommand(stackCommand),
-	.En          (En)
 );
 
 ALU ALU_I (
