@@ -124,7 +124,7 @@ always @(posedge clk) begin
 				end
 				default: ;
 			endcase
-			if (writeCommand[1] && gprFSRIn[4:0] == `ADDR_PCL) begin
+			if (writeCommand[1] && (gprFSRIn[4:0] == `ADDR_PCL)) begin
 				rPC <= {1'b0, IR[7:0]};
 				rskip <= 1'b1;
 			end
