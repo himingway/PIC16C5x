@@ -23,7 +23,7 @@ assign IR = rIR;
 
 always @(posedge clk) begin
 	if (!rst_n) begin
-		rIR = `INST_WIDTH'b0;
+		rIR <= `INST_WIDTH'b0;
 	end
 	else begin
 		if (fetchState == `FE_Q4) begin

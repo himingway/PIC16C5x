@@ -125,7 +125,7 @@ always@(posedge clk) begin
 	if(!rst) begin
 			status <= `DATA_WIDTH'b0001_1xxx;
 			FSReg <= `DATA_WIDTH'b1xxx_xxxx;
-			portA <= `IO_A_WIDTH'b0xxxx;
+			portA <= `IO_A_WIDTH'bxxxx;
 			portB <= `IO_B_WIDTH'bxxxx_xxxx;
 			portC <= `IO_C_WIDTH'bxxxx_xxxx;
 			GPR[8]  <= `DATA_WIDTH'b0000_0000;
@@ -171,7 +171,7 @@ always@(posedge clk) begin
 							5'h0E, 5'h0F, 5'h10, 5'h11, 5'h12, 5'h13, 
 							5'h14,5'h15, 5'h16, 5'h17, 5'h18, 5'h19, 
 							5'h1A, 5'h1B, 5'h1C, 5'h1D, 5'h1E, 5'h1F: begin
-								GPR[FSReg[4:0]] = writeDataIn;
+								GPR[FSReg[4:0]] <= writeDataIn;
 							end
 							default: ;
 						endcase
@@ -199,7 +199,7 @@ always@(posedge clk) begin
 					5'h0E, 5'h0F, 5'h10, 5'h11, 5'h12, 5'h13, 
 					5'h14,5'h15, 5'h16, 5'h17, 5'h18, 5'h19, 
 					5'h1A, 5'h1B, 5'h1C, 5'h1D, 5'h1E, 5'h1F: begin
-						GPR[fileAddr] = writeDataIn;
+						GPR[fileAddr] <= writeDataIn;
 					end
 					default : /* default */;
 				endcase
