@@ -13,7 +13,6 @@ module PC (
 	input  [                  8:0] IR          , // Instruction in
 	input  [   `EX_STATE_BITS-1:0] executeState, // Execute State
 	input  [   `FE_STATE_BITS-1:0] fetchState  , // Fetch State
-	input  [      `DATA_WIDTH-1:0] aluResultIn , // ALU result in
 	input  [`ALU_STATUS_WIDTH-1:0] aluStatusIn , // ALU State in
 	input  [      `DATA_WIDTH-1:0] gprIn       , // gpr In
 	input  [        `PC_WIDTH-1:0] stackIn     , // Stack in

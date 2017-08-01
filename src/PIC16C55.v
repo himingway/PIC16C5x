@@ -155,7 +155,7 @@ RegFileWriteControl RegFileWC_I(
 	.executeState      (executeState),
 	.aluResultIn       (aluResult),
 	.wRIn              (W),
-	.IR                (IR[5]),
+	.IR5               (IR[5]),
 	.gprStatusIn       (gprStatus),
 	.aluStatusIn       (aluStatus),
 	// OUT
