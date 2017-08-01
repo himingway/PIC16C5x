@@ -7,11 +7,10 @@
 `include "define.v"
 
 module RegFileWriteControl (
-	input  [   `FE_STATE_BITS-1:0] fetchState        , // Fetch state
 	input  [   `EX_STATE_BITS-1:0] executeState      , // Execute State
 	input  [  `ALU_DATA_WIDTH-1:0] aluResultIn       , // ALU Result in
 	input  [      `DATA_WIDTH-1:0] wRIn              , // w register in
-	input  [      `INST_WIDTH-1:0] IR                , // Instruction in
+	input                          IR5               , // Instruction in
 	input  [      `DATA_WIDTH-1:0] gprStatusIn       , // GPR Status in
 	inout  [`ALU_STATUS_WIDTH-1:0] aluStatusIn       , // ALU Status in
 	output [                  2:0] writeCommand      , // GPR write command
@@ -44,7 +43,7 @@ always @(*) begin
 			gprwriteData = aluResultIn;
 		end
 		`EX_Q4_FSZ,`EX_Q4_ELSE: begin 
-			if(IR[5]) begin 
+			if(IR5) begin 
 				gprwriteQ4En = 1'b1;
 				gprwriteData = aluResultIn;
 			end

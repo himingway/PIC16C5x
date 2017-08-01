@@ -78,7 +78,7 @@ port port_I(
 	.clk         (clk),
 	.rst_n       (rst_n),
 	.executeState(executeState),
-	.IR          (IR),
+	.IR          (IR[2:0]),
 	.WRIn        (W),
 	// OUT
 	.trisAReg    (trisAReg),
@@ -90,16 +90,15 @@ PC PC_I(
 	// IN
 	.clk         (clk),
 	.rst_n       (rst_n),
-	.IR          (IR),
+	.IR          (IR[8:0]),
 	.executeState(executeState),
 	.fetchState  (fetchState),
 	.aluResultIn (aluResult),
 	.aluStatusIn (aluStatus),
-	.gprStatusIn (gprStatus),
 	.gprIn       (gpr),
 	.stackIn     (stack),
 	.writeCommand(writeCommand),
-	.gprFSRIn    (gprFSR),
+	.gprFSRIn    (gprFSR[4:0]),
 	// OUT
 	.PC          (PC),
 	.goto        (goto),
@@ -154,11 +153,10 @@ ALU ALU_I (
 
 RegFileWriteControl RegFileWC_I(
 	// IN
-	.fetchState        (fetchState),
 	.executeState      (executeState),
 	.aluResultIn       (aluResult),
 	.wRIn              (W),
-	.IR                (IR),
+	.IR                (IR[5]),
 	.gprStatusIn       (gprStatus),
 	.aluStatusIn       (aluStatus),
 	// OUT
@@ -192,7 +190,7 @@ wRegWriteControl wRegWC_I(
 	// IN
 	.clk         (clk),
 	.rst_n       (rst_n),
-	.IR          (IR),
+	.IR          (IR[7:0]),
 	.executeState(executeState),
 	.aluResultIn (aluResult),
 	.gprIn       (gpr),

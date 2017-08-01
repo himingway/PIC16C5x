@@ -10,7 +10,7 @@ module port (
 	input                       clk         , // Clock
 	input                       rst_n       , // Asynchronous reset active low
 	input  [`EX_STATE_BITS-1:0] executeState,
-	input  [   `INST_WIDTH-1:0] IR          ,
+	input  [               2:0] IR          ,
 	input  [   `DATA_WIDTH-1:0] WRIn        ,
 	output [`IO_A_WIDTH-1:0] trisAReg,
 	output [`IO_B_WIDTH-1:0] trisBReg,

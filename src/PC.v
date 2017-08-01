@@ -10,16 +10,15 @@
 module PC (
 	input                          clk         , // Clock
 	input                          rst_n       , // Asynchronous reset active low
-	input  [      `INST_WIDTH-1:0] IR          , // Instruction in
+	input  [                  8:0] IR          , // Instruction in
 	input  [   `EX_STATE_BITS-1:0] executeState, // Execute State
 	input  [   `FE_STATE_BITS-1:0] fetchState  , // Fetch State
 	input  [      `DATA_WIDTH-1:0] aluResultIn , // ALU result in
 	input  [`ALU_STATUS_WIDTH-1:0] aluStatusIn , // ALU State in
-	input  [      `DATA_WIDTH-1:0] gprStatusIn , // GPR State in
 	input  [      `DATA_WIDTH-1:0] gprIn       , // gpr In
 	input  [        `PC_WIDTH-1:0] stackIn     , // Stack in
 	input  [                  2:0] writeCommand, // GPR write command
-	input  [      `DATA_WIDTH-1:0] gprFSRIn    , // gprFSRIn
+	input  [                  4:0] gprFSRIn    , // gprFSRIn
 	output [        `PC_WIDTH-1:0] PC          , // PC Register out
 	output                         goto        ,
 	output                         skip

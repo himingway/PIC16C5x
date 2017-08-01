@@ -9,7 +9,7 @@
 module wRegWriteControl (
 	input                       clk         , // Clock
 	input                       rst_n       , // Asynchronous reset active low
-	input  [   `INST_WIDTH-1:0] IR          , // Instruction in
+	input  [               7:0] IR          , // Instruction in
 	input  [`EX_STATE_BITS-1:0] executeState, // Execute State
 	input  [   `DATA_WIDTH-1:0] aluResultIn , // ALU result in
 	input  [   `DATA_WIDTH-1:0] gprIn       , // gpr In
