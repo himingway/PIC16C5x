@@ -93,7 +93,6 @@ PC PC_I(
 	.IR          (IR[8:0]),
 	.executeState(executeState),
 	.fetchState  (fetchState),
-	.aluResultIn (aluResult),
 	.aluStatusIn (aluStatus),
 	.gprIn       (gpr),
 	.stackIn     (stack),
