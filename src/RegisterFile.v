@@ -207,9 +207,9 @@ always@(posedge clk) begin
 			3'b001: begin
 				status <= statusIn;
 			end
-			// 3'b100: begin
-			// 	FSReg <= writeDataIn;
-			// end
+			3'b100: begin
+				FSReg <= writeDataIn;
+			end
 			default : /* default */;
 		endcase
 	end
